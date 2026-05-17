@@ -3,12 +3,30 @@ package base;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class BasePage {
     protected WebDriver driver;
+    protected WebDriverWait wait;
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    }
+
+    protected WebElement waitForVisibility(By locator) {
+
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+
+    }
+
+    protected WebElement waitForClickability(By locator) {
+
+        return wait.until(ExpectedConditions.elementToBeClickable(locator));
+
     }
 
     protected WebElement find(By locator) {
@@ -16,7 +34,7 @@ public class BasePage {
     }
 
     protected void click(By locator) {
-        find(locator).click();
+        waitForClickability(locator).click();
     }
 
     protected void type(By locator, String text) {
@@ -26,11 +44,11 @@ public class BasePage {
     }
 
     protected String getText(By locator) {
-      return  find(locator).getText();
+      return  waitForVisibility(locator).getText();
     }
 
     protected boolean isDisplayed(By locator) {
-        return find(locator).isDisplayed();
+        return waitForVisibility(locator).isDisplayed();
     }
 
 }
